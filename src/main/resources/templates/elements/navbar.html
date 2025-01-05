@@ -46,6 +46,9 @@
             <a th:classappend="${#path} == '/media' ? 'active'" th:href="@{/media}" class="dropdown-item">
               Media Dashboard
             </a>
+            <a th:classappend="${#path} == '/poll' ? 'active'" th:href="@{/poll}" class="dropdown-item">
+              Poll Dashboard
+            </a>
             <hr class="dropdown-divider">
             <form th:action="@{/logout}" th:method="post" class="m-0">
               <button class="dropdown-item">Logout</button>

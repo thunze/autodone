@@ -20,6 +20,7 @@ import de.uoc.dh.idh.autodone.entities.MediaEntity;
 import de.uoc.dh.idh.autodone.entities.StatusEntity;
 import de.uoc.dh.idh.autodone.services.GroupService;
 import de.uoc.dh.idh.autodone.services.MediaService;
+import de.uoc.dh.idh.autodone.services.PollService;
 import de.uoc.dh.idh.autodone.services.StatusService;
 
 @Controller()
@@ -31,6 +32,9 @@ public class StatusController {
 
 	@Autowired()
 	private MediaService mediaService;
+
+	@Autowired()
+	private PollService pollService;
 
 	@Autowired()
 	private StatusService statusService;
@@ -51,9 +55,11 @@ public class StatusController {
 			var status = statusService.getOne(params.get("uuid"));
 			var media = mapFields(of("status", status), new MediaEntity());
 			var page = mediaService.getPage(params.get("page"), params.get("sort"), status);
+			var poll = mapFields(of("status", status), new MediaEntity());
 
 			model.addAttribute("status", status);
 			model.addAttribute("media", media);
+			model.addAttribute("poll", poll);
 			model.addAttribute("page", page);
 			return "entity/status";
 		} else {

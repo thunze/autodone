@@ -1,11 +1,8 @@
 package de.uoc.dh.idh.autodone.entities;
 
-import static jakarta.persistence.CascadeType.ALL;
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.UUID;
+import static java.util.Base64.getEncoder;
 
-import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
@@ -16,15 +13,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data()
 @Entity()
 @JsonNaming(SnakeCaseStrategy.class)
-public class StatusEntity {
+public class PollEntity {
 
 	@Id()
 	@GeneratedValue(strategy = UUID)
@@ -33,28 +28,33 @@ public class StatusEntity {
 	//
 
 	@ManyToOne(optional = false)
-	public GroupEntity group;
-
-	@OneToMany(cascade = ALL, fetch = LAZY, mappedBy = "status")
-	public List<MediaEntity> media;
-
-	@OneToMany(cascade = ALL, fetch = LAZY, mappedBy = "status")
-	public List<PollEntity> poll;
+	public StatusEntity status;
 
 	//
 
-	@Column(nullable = false)
-	public Instant date;
+	@Column()
+	public String contentType;
+
+	@Column(length = 1500)
+	public String description;
+
+	@Column(length = 1024000)
+	public byte[] file;
 
 	@Column()
 	public String id;
 
-	@Column(nullable = false, length = 500)
-	public String status;
+	@Column()
+	public String url;
 
 	//
 
-	@Transient()
-	public List<Exception> exceptions;
+	public String getUrl() {
+		try {
+			return "data:" + contentType + ";base64," + getEncoder().encodeToString(file);
+		} catch (Exception exception) {
+			return url;
+		}
+	}
 
 }

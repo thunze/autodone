@@ -1,0 +1,81 @@
+package de.uoc.dh.idh.autodone.controller;
+
+import static de.uoc.dh.idh.autodone.utils.ObjectUtils.FORCE;
+import static de.uoc.dh.idh.autodone.utils.ObjectUtils.mapFields;
+import static de.uoc.dh.idh.autodone.utils.WebUtils.href;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import de.uoc.dh.idh.autodone.entities.PollEntity;
+import de.uoc.dh.idh.autodone.services.PollService;
+import de.uoc.dh.idh.autodone.services.StatusService;
+
+@Controller()
+@RequestMapping("/poll")
+public class PollController {
+
+	@Autowired()
+	private PollService pollService;
+
+	@Autowired()
+	private StatusService statusService;
+
+	//
+
+	@DeleteMapping()
+	public String delete(@RequestParam() Map<String, String> params) {
+		pollService.delete(params.get("uuid"));
+		return "redirect:" + href();
+	}
+
+	//
+
+	@GetMapping()
+	public String get(Model model, @RequestParam() Map<String, String> params) {
+		if (params.containsKey("uuid")) {
+			var poll = pollService.getOne(params.get("uuid"));
+
+			model.addAttribute("poll", poll);
+			return "entity/poll";
+		} else {
+			var poll = new PollEntity();
+			var status = statusService.getOwn();
+			var page = pollService.getPage(params.get("page"), params.get("sort"));
+
+			model.addAttribute("poll", poll);
+			model.addAttribute("status", status);
+			model.addAttribute("page", page);
+			return "entities/poll";
+		}
+	}
+
+	//
+
+	@PostMapping()
+	public String post(@RequestBody() MultipartFile file, @RequestParam() Map<String, Object> form) throws Exception {
+		var poll = new PollEntity();
+
+		if (form.containsKey("uuid")) {
+			poll = pollService.getOne((String) form.get("uuid"));
+		} else {
+			form.put("status", statusService.getOne((String) form.get("status.uuid")));
+			form.put("contentType", file.getContentType());
+			form.put("file", file.getBytes());
+		}
+
+		var save = pollService.save(mapFields(form, poll, FORCE));
+		return "redirect:/poll?uuid=" + save.uuid;
+	}
+
+}
