@@ -32,10 +32,6 @@ public class PollService extends BaseService<PollEntity> {
 	@Autowired()
 	private PollRepository pollRepository;
 
-	public Page<PollEntity> getPage(String page, String sort, StatusEntity status) {
-		return getPage(pageRequest(page, sort), status.poll);
-	}
-
 	//
 
 	public PollEntity publish(UUID uuid) {
