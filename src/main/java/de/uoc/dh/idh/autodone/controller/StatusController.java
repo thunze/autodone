@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import de.uoc.dh.idh.autodone.entities.MediaEntity;
+import de.uoc.dh.idh.autodone.entities.PollEntity;
 import de.uoc.dh.idh.autodone.entities.StatusEntity;
 import de.uoc.dh.idh.autodone.services.GroupService;
 import de.uoc.dh.idh.autodone.services.MediaService;
@@ -55,7 +56,7 @@ public class StatusController {
 			var status = statusService.getOne(params.get("uuid"));
 			var media = mapFields(of("status", status), new MediaEntity());
 			var page = mediaService.getPage(params.get("page"), params.get("sort"), status);
-			var poll = mapFields(of("status", status), new MediaEntity());
+			var poll = mapFields(of("status", status), new PollEntity());
 
 			model.addAttribute("status", status);
 			model.addAttribute("media", media);
