@@ -55,13 +55,15 @@ public class StatusController {
 		if (params.containsKey("uuid")) {
 			var status = statusService.getOne(params.get("uuid"));
 			var media = mapFields(of("status", status), new MediaEntity());
-			var page = mediaService.getPage(params.get("page"), params.get("sort"), status);
 			var poll = mapFields(of("status", status), new PollEntity());
+			var page = mediaService.getPage(params.get("page"), params.get("sort"), status);
+			var statusPoll = status.poll;
 
 			model.addAttribute("status", status);
 			model.addAttribute("media", media);
 			model.addAttribute("poll", poll);
 			model.addAttribute("page", page);
+			model.addAttribute("statusPoll", statusPoll);
 			return "entity/status";
 		} else {
 			var status = new StatusEntity();

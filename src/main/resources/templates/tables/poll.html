@@ -1,5 +1,5 @@
 <div class="row g-3">
-  <div class="col-md-3" th:each="poll : ${page}" th:object="${poll}">
+  <div class="col-md-3" th:object="${statusPoll}">
     <div class="card h-100">
       <img th:alt="*{description}" th:src="@{*{url}}" class="card-img-top">
 

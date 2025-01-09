@@ -7,6 +7,8 @@ import static de.uoc.dh.idh.autodone.utils.WebUtils.href;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.uoc.dh.idh.autodone.entities.PollEntity;
+import de.uoc.dh.idh.autodone.entities.StatusEntity;
 import de.uoc.dh.idh.autodone.services.PollService;
 import de.uoc.dh.idh.autodone.services.StatusService;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller()
 @RequestMapping("/poll")
@@ -63,13 +67,20 @@ public class PollController {
 	//
 
 	@PostMapping()
-	public String post(@RequestBody() MultipartFile file, @RequestParam() Map<String, Object> form) throws Exception {
+	public String post(@RequestBody() MultipartFile file, @RequestParam() Map<String, Object> form, HttpServletResponse resp) throws Exception {
 		var poll = new PollEntity();
 
 		if (form.containsKey("uuid")) {
 			poll = pollService.getOne((String) form.get("uuid"));
 		} else {
-			form.put("status", statusService.getOne((String) form.get("status.uuid")));
+			StatusEntity status = statusService.getOne((String) form.get("status.uuid"));
+			
+			if (status.poll != null || !status.media.isEmpty()) {
+				resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Cannot add a poll because status already has a poll or media");
+				return null;
+			}
+
+			form.put("status", status);
 			form.put("contentType", file.getContentType());
 			form.put("file", file.getBytes());
 		}
