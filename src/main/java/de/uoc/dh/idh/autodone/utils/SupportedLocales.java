@@ -244,10 +244,10 @@ public enum SupportedLocales {
     public static Map<String, String> getLanguages() {
     Map<String, String> languages = new TreeMap<>();
 
-    for (SupportedLocales locale : SupportedLocales.values()) {
-        languages.put(locale.getLocale(), locale.toString());
-    }
-
+        for (SupportedLocales locale : SupportedLocales.values()) {
+            languages.put(locale.getLocale(), locale.toString());
+        }
+        
     return languages;
 	}
 }
