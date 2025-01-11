@@ -7,17 +7,13 @@ import static de.uoc.dh.idh.autodone.utils.WebUtils.href;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import de.uoc.dh.idh.autodone.entities.PollEntity;
 import de.uoc.dh.idh.autodone.entities.StatusEntity;
@@ -67,7 +63,7 @@ public class PollController {
 	//
 
 	@PostMapping()
-	public String post(@RequestBody() MultipartFile file, @RequestParam() Map<String, Object> form, HttpServletResponse resp) throws Exception {
+	public String post(@RequestParam() Map<String, Object> form, HttpServletResponse resp) throws Exception {
 		var poll = new PollEntity();
 
 		if (form.containsKey("uuid")) {
@@ -81,8 +77,6 @@ public class PollController {
 			}
 
 			form.put("status", status);
-			form.put("contentType", file.getContentType());
-			form.put("file", file.getBytes());
 		}
 
 		var save = pollService.save(mapFields(form, poll, FORCE));

@@ -38,23 +38,7 @@ public class PollEntity {
 	@Column(length = 1500)
 	public String description;
 
-	@Column(length = 1024000)
-	public byte[] file;
-
 	@Column()
 	public String id;
-
-	@Column()
-	public String url;
-
-	//
-
-	public String getUrl() {
-		try {
-			return "data:" + contentType + ";base64," + getEncoder().encodeToString(file);
-		} catch (Exception exception) {
-			return url;
-		}
-	}
 
 }

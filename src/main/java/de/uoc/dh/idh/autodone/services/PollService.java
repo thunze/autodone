@@ -7,11 +7,9 @@ import static de.uoc.dh.idh.autodone.utils.WebUtils.remoteHref;
 import static de.uoc.dh.idh.autodone.utils.WebUtils.request;
 import static org.springframework.data.domain.Sort.by;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,9 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 
 import de.uoc.dh.idh.autodone.base.BaseService;
-import de.uoc.dh.idh.autodone.entities.MediaEntity;
 import de.uoc.dh.idh.autodone.entities.PollEntity;
-import de.uoc.dh.idh.autodone.entities.StatusEntity;
 import de.uoc.dh.idh.autodone.repositories.PollRepository;
 import jakarta.transaction.Transactional;
 
@@ -41,20 +37,7 @@ public class PollService extends BaseService<PollEntity> {
 	public PollEntity publish(PollEntity poll) {
 		var data = new LinkedMultiValueMap<String, Object>();
 		data.add("description", poll.description);
-		data.add("filename", poll.uuid.toString());
 		data.add("name", poll.uuid.toString());
-
-		data.add("file", new ByteArrayResource(poll.file) {
-
-			@Override()
-			public String getFilename() {
-				return poll.uuid.toString();
-			}
-
-		});
-
-		poll.contentType = null;
-		poll.file = null;
 
 		var href = remoteHref(poll.status.group.token.server.domain, MASTODON_API_MEDIA);
 		var post = request(PollEntity.class).auth(poll.status.group.token).form().post(href, data);

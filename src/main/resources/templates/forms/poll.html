@@ -2,21 +2,8 @@
   <input th:field="*{status.uuid}" th:if="*{status}" type="hidden">
   <input th:field="*{uuid}" th:if="*{uuid}" type="hidden">
   <div class="row">
-    <div th:if="*{uuid}" class="col-md-6 mb-3">
-      <div class="col-md-12 mb-3">
-        <label class="form-label fw-bold" for="file">Media Preview</label>
-        <img th:title="*{description}" th:src="*{url}" class="border img-fluid rounded w-100">
-      </div>
-    </div>
     <div th:classappend="'col-md-' + (*{uuid} ? 6 : 12)">
       <div class="row">
-        <div th:unless="*{uuid}" class="col-md-6 mb-3">
-          <label class="form-label fw-bold" for="file">Poll File</label>
-          <div class="form-floating">
-            <input placeholder required th:field="*{file}" accept="image/*" class="form-control" type="file">
-            <label class="form-label">File to attach Poll from</label>
-          </div>
-        </div>
         <div th:classappend="'col-md-' + (*{uuid} ? 12 : 6)" class="mb-3">
           <label class="form-label fw-bold" for="status.uuid">Poll Attachment</label>
           <div th:if="*{status}" class="input-group">
