@@ -50,6 +50,9 @@ public class GroupEntity {
 	@Column(nullable = false)
 	public boolean threaded;
 
+	@Column()
+	public String language;
+
 	//
 
 	@Transient()

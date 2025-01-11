@@ -5,7 +5,9 @@ import static de.uoc.dh.idh.autodone.utils.ObjectUtils.mapFields;
 import static de.uoc.dh.idh.autodone.utils.WebUtils.href;
 import static java.util.Map.of;
 
+import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +45,9 @@ public class GroupController {
 
 	@GetMapping()
 	public String get(Model model, @RequestParam() Map<String, String> params) {
+		Map<String, String> languages = getLanguages();
+		model.addAttribute("languages", languages);
+	
 		if (params.containsKey("uuid")) {
 			var group = groupService.getOne(params.get("uuid"));
 			var status = mapFields(of("group", group), new StatusEntity());
@@ -62,6 +67,17 @@ public class GroupController {
 		}
 	}
 
+	private Map<String, String> getLanguages() {
+		Map<String, String> languages = new TreeMap<>();
+
+		for(String lang : Locale.getISOLanguages()) {
+			Locale locale = new Locale(lang);
+			languages.put(lang, locale.getDisplayLanguage());
+		}
+
+		return languages;
+	}
+
 	//
 
 	@PostMapping()
@@ -75,5 +91,8 @@ public class GroupController {
 		var save = groupService.save(mapFields(form, group, FORCE));
 		return "redirect:/group?uuid=" + save.uuid;
 	}
+
+
+	
 
 }
