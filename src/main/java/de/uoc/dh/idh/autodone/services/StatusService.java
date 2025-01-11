@@ -63,7 +63,7 @@ public class StatusService extends BaseService<StatusEntity> {
 		}
 
 		if (status.group.language != null) {
-			data.put("language", status.group.language);
+			data.put("language", status.group.language.getLocale());
 		}
 
 		if (status.group.threaded) {

@@ -22,6 +22,7 @@ import de.uoc.dh.idh.autodone.entities.GroupEntity;
 import de.uoc.dh.idh.autodone.entities.StatusEntity;
 import de.uoc.dh.idh.autodone.services.GroupService;
 import de.uoc.dh.idh.autodone.services.StatusService;
+import de.uoc.dh.idh.autodone.utils.SupportedLocales;
 
 @Controller()
 @RequestMapping("/group")
@@ -45,7 +46,7 @@ public class GroupController {
 
 	@GetMapping()
 	public String get(Model model, @RequestParam() Map<String, String> params) {
-		Map<String, String> languages = getLanguages();
+		Map<String, String> languages = SupportedLocales.getLanguages();
 		model.addAttribute("languages", languages);
 	
 		if (params.containsKey("uuid")) {
@@ -65,17 +66,6 @@ public class GroupController {
 			model.addAttribute("page", page);
 			return "entities/group";
 		}
-	}
-
-	private Map<String, String> getLanguages() {
-		Map<String, String> languages = new TreeMap<>();
-
-		for(String lang : Locale.getISOLanguages()) {
-			Locale locale = new Locale(lang);
-			languages.put(lang, locale.getDisplayLanguage());
-		}
-
-		return languages;
 	}
 
 	//
