@@ -82,7 +82,4 @@ public class GroupController {
 		return "redirect:/group?uuid=" + save.uuid;
 	}
 
-
-	
-
 }

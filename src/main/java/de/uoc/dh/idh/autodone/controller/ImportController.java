@@ -6,7 +6,6 @@ import static de.uoc.dh.idh.autodone.utils.WebUtils.href;
 
 import java.text.ParseException;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

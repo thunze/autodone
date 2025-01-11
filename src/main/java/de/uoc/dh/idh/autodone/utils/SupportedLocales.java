@@ -249,5 +249,5 @@ public enum SupportedLocales {
         }
         
     return languages;
-	}
+    }
 }
