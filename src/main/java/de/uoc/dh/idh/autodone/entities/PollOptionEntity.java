@@ -1,10 +1,7 @@
 package de.uoc.dh.idh.autodone.entities;
 
-import static jakarta.persistence.CascadeType.ALL;
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.UUID;
 
-import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
@@ -14,14 +11,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Data()
 @Entity()
 @JsonNaming(SnakeCaseStrategy.class)
-public class PollEntity {
+public class PollOptionEntity {
 
 	@Id()
 	@GeneratedValue(strategy = UUID)
@@ -29,21 +25,14 @@ public class PollEntity {
 
 	//
 
-	@OneToOne(optional = false)
-	public StatusEntity status;
-
-	@OneToMany(cascade = ALL, fetch = LAZY, mappedBy = "poll")
-	public List<PollOptionEntity> options;
+	@ManyToOne(optional = false)
+	public PollEntity poll;
 
 	//
 
-	@Column(nullable = false)
-	public int expiresIn;
-
-	@Column(nullable = false)
-	public boolean multiple;
+	@Column(length = 50)
+	public String option;
 
 	@Column()
 	public String id;
-
 }
