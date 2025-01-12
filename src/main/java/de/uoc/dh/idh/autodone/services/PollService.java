@@ -1,10 +1,5 @@
 package de.uoc.dh.idh.autodone.services;
 
-import static de.uoc.dh.idh.autodone.config.MastodonConfig.MASTODON_API_MEDIA;
-import static de.uoc.dh.idh.autodone.utils.ObjectUtils.FORCE;
-import static de.uoc.dh.idh.autodone.utils.ObjectUtils.copyFields;
-import static de.uoc.dh.idh.autodone.utils.WebUtils.remoteHref;
-import static de.uoc.dh.idh.autodone.utils.WebUtils.request;
 import static org.springframework.data.domain.Sort.by;
 
 import java.util.UUID;
@@ -14,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 
 import de.uoc.dh.idh.autodone.base.BaseService;
 import de.uoc.dh.idh.autodone.entities.PollEntity;
@@ -27,22 +21,6 @@ public class PollService extends BaseService<PollEntity> {
 
 	@Autowired()
 	private PollRepository pollRepository;
-
-	//
-
-	public PollEntity publish(UUID uuid) {
-		return publish(pollRepository.findById(uuid).get());
-	}
-
-	public PollEntity publish(PollEntity poll) {
-		var data = new LinkedMultiValueMap<String, Object>();
-		data.add("description", poll.description);
-		data.add("name", poll.uuid.toString());
-
-		var href = remoteHref(poll.status.group.token.server.domain, MASTODON_API_MEDIA);
-		var post = request(PollEntity.class).auth(poll.status.group.token).form().post(href, data);
-		return save(copyFields(post, poll, FORCE));
-	}
 
 	//
 
