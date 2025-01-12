@@ -42,21 +42,15 @@ public class PollController {
 	//
 
 	@GetMapping()
-	public String get(Model model, @RequestParam() Map<String, String> params) {
+	public String get(Model model, @RequestParam() Map<String, String> params, HttpServletResponse resp) throws Exception {
 		if (params.containsKey("uuid")) {
 			var poll = pollService.getOne(params.get("uuid"));
 
 			model.addAttribute("poll", poll);
 			return "entity/poll";
 		} else {
-			var poll = new PollEntity();
-			var status = statusService.getOwn();
-			var page = pollService.getPage(params.get("page"), params.get("sort"));
-
-			model.addAttribute("poll", poll);
-			model.addAttribute("status", status);
-			model.addAttribute("page", page);
-			return "entities/poll";
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameter 'uuid'");
+			return null;
 		}
 	}
 

@@ -65,10 +65,7 @@
     </th:block>
 
     <th:block th:if="${statusPoll != null}">
-      <h2>
-        <a th:href="@{/poll}" class="btn btn-outline-secondary align-bottom"><i class="bi bi-list"></i></a>
-        Poll
-      </h2>
+      <h2>Poll</h2>
       <th:block th:insert="~{tables/poll}" />
     </th:block>
   </main>
