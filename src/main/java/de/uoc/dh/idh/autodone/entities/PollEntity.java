@@ -27,7 +27,7 @@ public class PollEntity {
 
 	//
 
-	@OneToOne()
+	@OneToOne(optional = false)
 	public StatusEntity status;
 
 	//
