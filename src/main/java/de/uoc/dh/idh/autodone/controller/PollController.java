@@ -4,6 +4,7 @@ import static de.uoc.dh.idh.autodone.utils.ObjectUtils.FORCE;
 import static de.uoc.dh.idh.autodone.utils.ObjectUtils.mapFields;
 import static de.uoc.dh.idh.autodone.utils.WebUtils.href;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import de.uoc.dh.idh.autodone.entities.PollEntity;
+import de.uoc.dh.idh.autodone.entities.PollOptionEntity;
 import de.uoc.dh.idh.autodone.entities.StatusEntity;
 import de.uoc.dh.idh.autodone.services.PollService;
 import de.uoc.dh.idh.autodone.services.StatusService;
@@ -24,6 +26,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller()
 @RequestMapping("/poll")
 public class PollController {
+
+	public static final int MAX_POLL_OPTIONS = 4;
 
 	@Autowired()
 	private PollService pollService;
@@ -73,7 +77,27 @@ public class PollController {
 			form.put("status", status);
 		}
 
-		var save = pollService.save(mapFields(form, poll, FORCE));
+		var mappedPoll = mapFields(form, poll, FORCE);
+
+		var pollOptions = new ArrayList<PollOptionEntity>();
+
+		for (var i = 0; i < MAX_POLL_OPTIONS; i++) {
+			var option = (String) form.get("options[" + i + "]");
+			System.out.println(option);
+			if (option != null && !option.isBlank()) {
+				PollOptionEntity pollOption = new PollOptionEntity();
+				pollOption.poll = mappedPoll;
+				pollOption.option = option;
+				pollOptions.add(pollOption);
+			}
+		}
+		if (pollOptions.size() < 2) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "At least two poll options are required");
+			return null;
+		}
+		mappedPoll.options = pollOptions;
+
+		var save = pollService.save(mappedPoll);
 		return "redirect:/poll?uuid=" + save.uuid;
 	}
 
