@@ -1,9 +1,6 @@
 <div class="row g-3">
   <div class="col-md-3" th:object="${statusPoll}">
     <div class="card h-100">
-      <div class="card-body p-0">
-        <p th:if="*{description}" th:text="*{description}" class="card-text p-3"></p>
-      </div>
 
       <div class="card-footer d-flex justify-content-end">
         <a th:href="@{/poll(uuid=*{uuid})}" class="btn btn-sm btn-outline-primary me-1">
