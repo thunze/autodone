@@ -23,12 +23,20 @@
             <label class="form-label">Status this Poll is attached to</label>
           </div>
         </div>
-        <div th:classappend="'col-md-' + (*{uuid} ? 12 : 6)" class="mb-3">
-          <label class="form-label fw-bold" for="description">Poll Description</label>
-          <div class="form-floating">
-            <textarea placeholder th:field="*{description}" class="form-control" maxlength="1500"></textarea>
-            <label class="form-label">Description for the attached Poll</label>
-          </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <label class="form-label fw-bold">Poll Options</label>
+      <div id="poll-options">
+        <div th:each="option, iterStat : *{options}" class="form-floating mb-3">
+          <input type="text" class="form-control" th:name="|options[${iterStat.index}]|" th:placeholder="|Option ${iterStat.index + 1}|" th:value="${option.option}" th:required="${iterStat.index < 2}">
+          <label th:text="|Option ${iterStat.index + 1}|">Option 1</label>
+        </div>
+        <div th:if="*{options.size()} < 2" class="form-floating mb-3">
+          <input type="text" class="form-control" name="options[1]" placeholder="Option 2" required>
+          <label>Option 2</label>
         </div>
       </div>
     </div>
@@ -41,3 +49,61 @@
     </th:block>
   </div>
 </form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const maxOptions = 4;
+    const pollOptions = document.getElementById('poll-options');
+
+    function addOptionField(index) {
+      const newOption = document.createElement('div');
+      newOption.classList.add('form-floating', 'mb-3');
+      newOption.innerHTML = `
+        <input type="text" class="form-control" name="options[${index}]" placeholder="Option ${index + 1}">
+        <label>Option ${index + 1}</label>
+      `;
+      pollOptions.appendChild(newOption);
+    }
+
+    function updateOptionFields() {
+      const optionFields = pollOptions.querySelectorAll('.form-floating');
+      optionFields.forEach((field, index) => {
+        const input = field.querySelector('input');
+        input.name = `options[${index}]`;
+        input.placeholder = `Option ${index + 1}`;
+        field.querySelector('label').textContent = `Option ${index + 1}`;
+        input.required = index < 2 || input.value !== '';
+      });
+    }
+
+    pollOptions.addEventListener('input', function (event) {
+      const optionFields = pollOptions.querySelectorAll('.form-floating');
+      const lastField = optionFields[optionFields.length - 1];
+      const lastInput = lastField.querySelector('input');
+
+      if (lastInput.value !== '' && optionFields.length < maxOptions) {
+        addOptionField(optionFields.length);
+      }
+
+      optionFields.forEach((field, index) => {
+        const input = field.querySelector('input');
+        input.addEventListener('input', function () {
+          if (input.value === '' && optionFields.length > 2 && field !== lastField) {
+            const nextField = optionFields[index + 1];
+            field.remove();
+            updateOptionFields();
+            if (nextField) {
+              nextField.querySelector('input').focus();
+            } else if (index > 0) {
+              optionFields[index - 1].querySelector('input').focus();
+            }
+          }
+        });
+      });
+
+      updateOptionFields();
+    });
+
+    updateOptionFields();
+  });
+</script>
