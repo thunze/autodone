@@ -1,4 +1,4 @@
-<form th:action="${action}" th:method="post" th:object="${poll}" class="m-0" enctype="multipart/form-data">
+<form th:action="${action}" th:method="post" th:object="${poll}" class="m-0" enctype="multipart/form-data" id="poll-form">
   <input th:field="*{status.uuid}" th:if="*{status}" type="hidden">
   <input th:field="*{uuid}" th:if="*{uuid}" type="hidden">
   <div class="row">
@@ -92,7 +92,10 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const maxOptions = 4;
+
+    const form = document.getElementById('poll-form');
     const pollOptions = document.getElementById('poll-options');
+    const initialPollOptionsState = pollOptions.innerHTML;
 
     function addOptionField(index) {
       const newOption = document.createElement('div');
@@ -145,6 +148,10 @@
 
     pollOptions.addEventListener('input', handleInput);
     pollOptions.addEventListener('change', handleInput);
+
+    form.addEventListener('reset', function(event) {
+        pollOptions.innerHTML = initialPollOptionsState;
+    });
 
     updateOptionFields();
   });
