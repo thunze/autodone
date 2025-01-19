@@ -5,15 +5,15 @@
     <div class="col-md-6 mb-3">
       <label class="form-label fw-bold">Poll Options</label>
       <div id="poll-options">
-        <div th:each="option, iterStat : *{options}" class="form-floating mb-3">
+        <div th:each="option, iterStat : *{options}" class="form-floating mb-3 poll-option">
           <input type="text" class="form-control" th:name="|options[${iterStat.index}]|" th:placeholder="|Option ${iterStat.index + 1}|" th:value="${option}" th:required="${iterStat.index < 2}">
           <label th:text="|Option ${iterStat.index + 1}|">Option 1</label>
         </div>
-        <div th:if="*{options.size()} < 2" class="form-floating mb-3">
+        <div th:if="*{options.size()} < 2" class="form-floating mb-3 poll-option">
           <input type="text" class="form-control" th:name="|options[1]|" th:placeholder="|Option 2|" required>
           <label>Option 2</label>
         </div>
-        <div th:if="*{options.size()} < 4" class="form-floating mb-3">
+        <div th:if="*{options.size()} < 4" class="form-floating mb-3 poll-option">
           <input type="text" class="form-control" th:name="|options[*{options.size()}]|" th:placeholder="|Option *{options.size() + 1}|" th:required="*{options.size()} < 2">
           <label th:text="|Option *{options.size() + 1}|">Option 1</label>
         </div>
@@ -90,7 +90,7 @@
 
     function addOptionField(index) {
       const newOption = document.createElement('div');
-      newOption.classList.add('form-floating', 'mb-3');
+      newOption.classList.add('form-floating', 'mb-3', 'poll-option');
       newOption.innerHTML = `
         <input type="text" class="form-control" name="options[${index}]" placeholder="Option ${index + 1}">
         <label>Option ${index + 1}</label>
@@ -99,7 +99,7 @@
     }
 
     function updateOptionFields() {
-      const optionFields = pollOptions.querySelectorAll('.form-floating');
+      const optionFields = pollOptions.querySelectorAll('.poll-option');
       optionFields.forEach((field, index) => {
         const input = field.querySelector('input');
         input.name = `options[${index}]`;
@@ -110,7 +110,7 @@
     }
 
     function handleInput(event) {
-      const optionFields = pollOptions.querySelectorAll('.form-floating');
+      const optionFields = pollOptions.querySelectorAll('.poll-option');
       const lastField = optionFields[optionFields.length - 1];
       const lastInput = lastField.querySelector('input');
 
@@ -128,7 +128,7 @@
         }
       });
 
-      const optionFieldsUpdated = pollOptions.querySelectorAll('.form-floating');
+      const optionFieldsUpdated = pollOptions.querySelectorAll('.poll-option');
 
       if (lastInput.value !== '' && optionFieldsUpdated.length < maxOptions) {
         addOptionField(optionFields.length);
