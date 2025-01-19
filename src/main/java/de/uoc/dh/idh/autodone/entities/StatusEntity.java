@@ -38,7 +38,7 @@ public class StatusEntity {
 	@OneToMany(cascade = ALL, fetch = LAZY, mappedBy = "status")
 	public List<MediaEntity> media;
 
-	@OneToOne(cascade = ALL, fetch = LAZY, mappedBy = "status")
+	@OneToOne(cascade = ALL, fetch = LAZY, mappedBy = "status", orphanRemoval = true)
 	public PollEntity poll;
 
 	//
