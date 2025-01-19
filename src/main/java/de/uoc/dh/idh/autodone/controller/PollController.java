@@ -40,6 +40,7 @@ public class PollController {
 	public String delete(@RequestParam() Map<String, String> params) {
 		var uuid = params.get("uuid");
 		var poll = pollService.getOne(params.get("uuid"));
+		poll.status.poll = null;
 		pollService.delete(uuid);
 		return "redirect:/status?uuid=" + poll.status.uuid;
 	}
