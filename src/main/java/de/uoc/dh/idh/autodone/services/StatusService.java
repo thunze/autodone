@@ -59,9 +59,13 @@ public class StatusService extends BaseService<StatusEntity> {
 		data.put("status", status.status);
 
 		data.put("visibility", status.group.visibility.toString());
-		
+
 		if (status.media != null) {
 			data.put("media_ids", status.media.stream().map((media) -> media.id).toList());
+		}
+
+		if (status.group.language != null) {
+			data.put("language", status.group.language.getLocale());
 		}
 
 		if (status.contentWarning != null) {

@@ -10,18 +10,18 @@ import java.util.UUID;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import de.uoc.dh.idh.autodone.utils.SupportedLocales;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Transient;
 import lombok.Data;
 import de.uoc.dh.idh.autodone.utils.Visibility;
-
 
 @Data()
 @Entity()
@@ -53,6 +53,10 @@ public class GroupEntity {
 
 	@Column(nullable = false)
 	public boolean threaded;
+
+	@Enumerated(EnumType.STRING)
+	@Column()
+	public SupportedLocales language;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
