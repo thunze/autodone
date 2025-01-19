@@ -37,6 +37,37 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label fw-bold" for="poll-duration">Poll Duration</label>
+          <div class="form-floating">
+            <select th:field="*{expiresIn}" class="form-select" required>
+              <option value="300">5 minutes</option>
+              <option value="1800">30 minutes</option>
+              <option value="3600">1 hour</option>
+              <option value="21600">6 hours</option>
+              <option value="43200">12 hours</option>
+              <option value="86400">1 day</option>
+              <option value="259200">3 days</option>
+              <option value="604800">7 days</option>
+            </select>
+            <label class="form-label">Poll Duration</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label fw-bold">Poll Settings</label>
+          <div class="form-check form-switch">
+            <input th:field="*{multiple}" class="form-check-input" id="multiple" type="checkbox">
+            <input name="multiple" type="hidden" value="false">
+            <label class="form-check-label" for="multiple">
+              <strong>Multiple Choice</strong>
+              <small>(allows multiple options to be selected)</small>
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="accordion-footer d-flex flex-row-reverse">
