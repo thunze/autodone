@@ -2,9 +2,22 @@
   <input th:field="*{status.uuid}" th:if="*{status}" type="hidden">
   <input th:field="*{uuid}" th:if="*{uuid}" type="hidden">
   <div class="row">
-    <div th:classappend="'col-md-' + (*{uuid} ? 6 : 12)">
+    <div class="col-md-6 mb-3">
+      <label class="form-label fw-bold">Poll Options</label>
+      <div id="poll-options">
+        <div th:each="option, iterStat : *{options}" class="form-floating mb-3">
+          <input type="text" class="form-control" th:name="|options[${iterStat.index}]|" th:placeholder="|Option ${iterStat.index + 1}|" th:value="${option}" th:required="${iterStat.index < 2}">
+          <label th:text="|Option ${iterStat.index + 1}|">Option 1</label>
+        </div>
+        <div th:if="*{options.size()} < 2" class="form-floating mb-3">
+          <input type="text" class="form-control" name="options[1]" placeholder="Option 2" required>
+          <label>Option 2</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
       <div class="row">
-        <div th:classappend="'col-md-' + (*{uuid} ? 12 : 6)" class="mb-3">
+        <div class="col-md-12 mb-3">
           <label class="form-label fw-bold" for="status.uuid">Poll Attachment</label>
           <div th:if="*{status}" class="input-group">
             <div class="form-floating">
@@ -22,21 +35,6 @@
             </select>
             <label class="form-label">Status this Poll is attached to</label>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12 mb-3">
-      <label class="form-label fw-bold">Poll Options</label>
-      <div id="poll-options">
-        <div th:each="option, iterStat : *{options}" class="form-floating mb-3">
-          <input type="text" class="form-control" th:name="|options[${iterStat.index}]|" th:placeholder="|Option ${iterStat.index + 1}|" th:value="${option}" th:required="${iterStat.index < 2}">
-          <label th:text="|Option ${iterStat.index + 1}|">Option 1</label>
-        </div>
-        <div th:if="*{options.size()} < 2" class="form-floating mb-3">
-          <input type="text" class="form-control" name="options[1]" placeholder="Option 2" required>
-          <label>Option 2</label>
         </div>
       </div>
     </div>
