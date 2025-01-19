@@ -41,6 +41,9 @@ public class ImportService {
 	@Autowired()
 	private DateTimeUtils dateTimeUtils;
 
+	@Autowired
+    private MediaDownloadQueue mediaDownloadQueue;
+
 	//
 
 	public GroupEntity importGroup(InputStream inputStream) throws Exception {
@@ -114,20 +117,23 @@ public class ImportService {
 
 			if (columns.length > 3) {
 				try {
-					status.media.add(mapFields(of("status", status), importMedia(columns[3])));
+					System.out.println("Adding media download task for " + columns[3]);
+					mediaDownloadQueue.addTask(new MediaDownloadTask(columns[3], status, columns[4]));
 
-					if (status.media.get(0).description != null) {
-						status.exceptions.add(new ParseException("Image scaled down (4th column)", number));
-						status.media.get(0).description = null;
-					}
+					// status.media.add(mapFields(of("status", status), importMedia(columns[3])));
 
-					if (columns.length > 4) {
-						if (columns[4].length() > 1500) {
-							status.exceptions.add(new ParseException("Image caption too long (5th column)", number));
-						} else {
-							status.media.get(0).description = columns[4];
-						}
-					}
+					// if (status.media.get(0).description != null) {
+					// 	status.exceptions.add(new ParseException("Image scaled down (4th column)", number));
+					// 	status.media.get(0).description = null;
+					// }
+
+					// if (columns.length > 4) {
+					// 	if (columns[4].length() > 1500) {
+					// 		status.exceptions.add(new ParseException("Image caption too long (5th column)", number));
+					// 	} else {
+					// 		status.media.get(0).description = columns[4];
+					// 	}
+					// }
 				} catch (Exception exception) {
 					status.exceptions.add(new ParseException("Image not usable (4th column)", number));
 				}
@@ -139,41 +145,41 @@ public class ImportService {
 
 	//
 
-	public MediaEntity importMedia(String url) throws Exception {
-		var media = new MediaEntity();
-		var request = new URL(url).openConnection();
+	// public MediaEntity importMedia(String url) throws Exception {
+	// 	var media = new MediaEntity();
+	// 	var request = new URL(url).openConnection();
 
-		media.contentType = request.getContentType();
+	// 	media.contentType = request.getContentType();
 
-		if (request.getContentLength() < 1024000) {
-			media.file = request.getInputStream().readAllBytes();
-		} else {
-			var buffer = new ByteArrayOutputStream();
-			var source = read(request.getInputStream());
+	// 	if (request.getContentLength() < 1024000) {
+	// 		media.file = request.getInputStream().readAllBytes();
+	// 	} else {
+	// 		var buffer = new ByteArrayOutputStream();
+	// 		var source = read(request.getInputStream());
 
-			var scaleX = source.getWidth();
-			var scaleY = source.getHeight();
+	// 		var scaleX = source.getWidth();
+	// 		var scaleY = source.getHeight();
 
-			if (scaleX > AUTODONE_IMG_SIZE_X) {
-				scaleX = AUTODONE_IMG_SIZE_X;
-				scaleY = (scaleX * source.getHeight()) / source.getWidth();
-			}
+	// 		if (scaleX > AUTODONE_IMG_SIZE_X) {
+	// 			scaleX = AUTODONE_IMG_SIZE_X;
+	// 			scaleY = (scaleX * source.getHeight()) / source.getWidth();
+	// 		}
 
-			if (scaleY > AUTODONE_IMG_SIZE_Y) {
-				scaleY = AUTODONE_IMG_SIZE_Y;
-				scaleX = (scaleY * source.getWidth()) / source.getHeight();
-			}
+	// 		if (scaleY > AUTODONE_IMG_SIZE_Y) {
+	// 			scaleY = AUTODONE_IMG_SIZE_Y;
+	// 			scaleX = (scaleY * source.getWidth()) / source.getHeight();
+	// 		}
 
-			var target = new BufferedImage(scaleX, scaleY, TYPE_INT_ARGB);
-			var scaled = source.getScaledInstance(scaleX, scaleY, SCALE_FAST);
-			target.getGraphics().drawImage(scaled, 0, 0, null, null);
-			write(target, AUTODONE_IMG_FORMAT, buffer);
+	// 		var target = new BufferedImage(scaleX, scaleY, TYPE_INT_ARGB);
+	// 		var scaled = source.getScaledInstance(scaleX, scaleY, SCALE_FAST);
+	// 		target.getGraphics().drawImage(scaled, 0, 0, null, null);
+	// 		write(target, AUTODONE_IMG_FORMAT, buffer);
 
-			media.description = "Scaled down from original";
-			media.file = buffer.toByteArray();
-		}
+	// 		media.description = "Scaled down from original";
+	// 		media.file = buffer.toByteArray();
+	// 	}
 
-		return media;
-	}
+	// 	return media;
+	// }
 
 }
