@@ -31,7 +31,7 @@
       <label class="form-label fw-bold">Poll Options</label>
       <div id="poll-options">
         <div th:each="option, iterStat : *{options}" class="form-floating mb-3">
-          <input type="text" class="form-control" th:name="|options[${iterStat.index}]|" th:placeholder="|Option ${iterStat.index + 1}|" th:value="${option.option}" th:required="${iterStat.index < 2}">
+          <input type="text" class="form-control" th:name="|options[${iterStat.index}]|" th:placeholder="|Option ${iterStat.index + 1}|" th:value="${option}" th:required="${iterStat.index < 2}">
           <label th:text="|Option ${iterStat.index + 1}|">Option 1</label>
         </div>
         <div th:if="*{options.size()} < 2" class="form-floating mb-3">

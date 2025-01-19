@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import de.uoc.dh.idh.autodone.entities.PollEntity;
-import de.uoc.dh.idh.autodone.entities.PollOptionEntity;
 import de.uoc.dh.idh.autodone.entities.StatusEntity;
 import de.uoc.dh.idh.autodone.services.PollService;
 import de.uoc.dh.idh.autodone.services.StatusService;
@@ -79,16 +78,12 @@ public class PollController {
 
 		var mappedPoll = mapFields(form, poll, FORCE);
 
-		var pollOptions = new ArrayList<PollOptionEntity>();
+		var pollOptions = new ArrayList<String>();
 
 		for (var i = 0; i < MAX_POLL_OPTIONS; i++) {
 			var option = (String) form.get("options[" + i + "]");
-			System.out.println(option);
 			if (option != null && !option.isBlank()) {
-				PollOptionEntity pollOption = new PollOptionEntity();
-				pollOption.poll = mappedPoll;
-				pollOption.option = option;
-				pollOptions.add(pollOption);
+				pollOptions.add(option);
 			}
 		}
 		if (pollOptions.size() < 2) {
