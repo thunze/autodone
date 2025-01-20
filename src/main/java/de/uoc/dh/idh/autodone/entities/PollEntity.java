@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import jakarta.persistence.CollectionTable;
@@ -18,6 +19,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+
+import de.uoc.dh.idh.autodone.serde.PollOptionDeserializer;
 
 @Data()
 @Entity()
@@ -33,6 +36,7 @@ public class PollEntity {
 	@OneToOne(optional = false)
 	public StatusEntity status;
 
+	@JsonDeserialize(contentUsing = PollOptionDeserializer.class)
 	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
 	@CollectionTable(name = "poll_options", joinColumns = @JoinColumn(name = "poll_id"))
 	@Column(name = "option", nullable = false)
