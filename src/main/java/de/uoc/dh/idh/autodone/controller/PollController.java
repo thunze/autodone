@@ -88,10 +88,17 @@ public class PollController {
 				pollOptions.add(option);
 			}
 		}
+
 		if (pollOptions.size() < 2) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "At least two poll options are required");
 			return null;
 		}
+
+		if (pollOptions.stream().distinct().count() != pollOptions.size()) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Poll options must be unique");
+			return null;
+		}
+
 		mappedPoll.options = pollOptions;
 
 		var save = pollService.save(mappedPoll);
