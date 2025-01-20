@@ -2,7 +2,6 @@ package de.uoc.dh.idh.autodone.controller;
 
 import static de.uoc.dh.idh.autodone.utils.ObjectUtils.FORCE;
 import static de.uoc.dh.idh.autodone.utils.ObjectUtils.mapFields;
-import static de.uoc.dh.idh.autodone.utils.WebUtils.href;
 
 import java.util.ArrayList;
 import java.util.Map;
