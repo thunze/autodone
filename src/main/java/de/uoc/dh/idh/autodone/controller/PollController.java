@@ -85,7 +85,7 @@ public class PollController {
 		for (var i = 0; i < MAX_POLL_OPTIONS; i++) {
 			var option = (String) form.get("options[" + i + "]");
 			if (option != null && !option.isBlank()) {
-				pollOptions.add(option);
+				pollOptions.add(option.trim());
 			}
 		}
 
