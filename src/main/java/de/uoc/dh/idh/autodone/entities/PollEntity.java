@@ -50,4 +50,7 @@ public class PollEntity {
 	@Column(nullable = false)
 	public boolean multiple;
 
+	@Column()
+	public String id;
+
 }
