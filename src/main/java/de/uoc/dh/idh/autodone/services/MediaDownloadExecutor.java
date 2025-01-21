@@ -4,6 +4,8 @@ import static de.uoc.dh.idh.autodone.config.AutodoneConfig.AUTODONE_IMG_FORMAT;
 import static de.uoc.dh.idh.autodone.config.AutodoneConfig.AUTODONE_IMG_SIZE_X;
 import static de.uoc.dh.idh.autodone.config.AutodoneConfig.AUTODONE_IMG_SIZE_Y;
 import static de.uoc.dh.idh.autodone.config.AutodoneConfig.AUTODONE_DOWNLOADRATELIMIT;
+import static de.uoc.dh.idh.autodone.config.AutodoneConfig.AUTODONE_DOWNLOADTHREADPOOL;
+
 
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -42,7 +44,7 @@ public class MediaDownloadExecutor {
     @Autowired()
     public MediaDownloadExecutor(MediaDownloadQueue queue) {
         this.queue = queue.getQueue();
-        this.executorService = Executors.newFixedThreadPool(1);
+        this.executorService = Executors.newFixedThreadPool(AUTODONE_DOWNLOADTHREADPOOL);
         System.out.println("Created executor service with 1 threads");
         System.out.println("MediaDownloadExecutor queue instance: " + System.identityHashCode(this.queue));
 
@@ -57,23 +59,15 @@ public class MediaDownloadExecutor {
 
     private void processTasks() {
         try {
-            System.out.println("Thread started");
+            System.out.println("Thread started with id: " + Thread.currentThread().getId());
             while (true) {
-                System.out.println("Taking task from queue:" + queue.size());
-                System.out.println("MediaDownloadExecutor queue instance: " + System.identityHashCode(queue));
                 MediaDownloadTask task = queue.take();
-                System.out.println("Downloading media for Time" + task.getStatus().getDate());
                 MediaEntity downloadMedia = importMedia(task.getMedia().getUrl());
-                System.out.println("Finished download media: " + task.getMedia().getUrl());
-                System.out.println("Download media file: " + downloadMedia.file.length);
 
-                System.out.println("Getting media from database: " + task.getMedia().getUuid().toString());
                 MediaEntity media = mediaService.getAny(task.getMedia().getUuid());
-                System.out.println("Got media from database: " + media.getUuid().toString());
 
                 media.file = downloadMedia.file;
 
-                System.out.println("media file: " + media.file.length);
 
                 media.contentType = downloadMedia.contentType;
                 if (downloadMedia.description != null) {
@@ -81,11 +75,8 @@ public class MediaDownloadExecutor {
                 }
                 
                 mediaService.save(media);
-                System.out.println("Saved media: " + media.getUuid().toString());
 
-                System.out.println("Thread sleeping");
                 TimeUnit.MILLISECONDS.sleep(AUTODONE_DOWNLOADRATELIMIT);
-                System.out.println("Thread continue");
 
             }
         } catch (InterruptedException e) {
@@ -100,7 +91,6 @@ public class MediaDownloadExecutor {
 
     public MediaEntity importMedia(String url) {
         try {
-            System.out.println("Downloading media: " + url);
             var media = new MediaEntity();
             var request = new URL(url).openConnection();
 

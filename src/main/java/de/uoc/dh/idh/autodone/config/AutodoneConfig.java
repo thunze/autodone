@@ -36,7 +36,11 @@ public class AutodoneConfig {
 
 	public static final int AUTODONE_THREADPOOL;
 
+	//
+	
 	public static final int AUTODONE_DOWNLOADRATELIMIT;
+
+	public static final int AUTODONE_DOWNLOADTHREADPOOL;
 
 	//
 
@@ -56,6 +60,7 @@ public class AutodoneConfig {
 		AUTODONE_SCHEDULING = getEnvironment().getProperty("autodone.scheduling", int.class);
 		AUTODONE_THREADPOOL = getEnvironment().getProperty("autodone.threadpool", int.class);
 		AUTODONE_DOWNLOADRATELIMIT = getEnvironment().getProperty("autodone.downloadratelimit", int.class);
+		AUTODONE_DOWNLOADTHREADPOOL = getEnvironment().getProperty("autodone.downloadthreadpool", int.class);
 	}
 
 }
