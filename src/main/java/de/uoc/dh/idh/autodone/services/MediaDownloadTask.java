@@ -1,32 +1,23 @@
 package de.uoc.dh.idh.autodone.services;
 
+import de.uoc.dh.idh.autodone.entities.MediaEntity;
 import de.uoc.dh.idh.autodone.entities.StatusEntity;
 
 public class MediaDownloadTask implements Comparable<MediaDownloadTask> {
-    private final String media;
+    private final MediaEntity media;
     private final StatusEntity status;
-    private final String description;
 
-    public MediaDownloadTask(String media, StatusEntity status, String description) {
+    public MediaDownloadTask(MediaEntity media, StatusEntity status) {
         this.media = media;
         this.status = status;
-        this.description = description;
     }
 
-    public MediaDownloadTask(String media, StatusEntity status) {
-        this(media, status, null);
-    }
-
-    public String getMedia() {
+    public MediaEntity getMedia() {
         return media;
     }
 
     public StatusEntity getStatus() {
         return status;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     @Override

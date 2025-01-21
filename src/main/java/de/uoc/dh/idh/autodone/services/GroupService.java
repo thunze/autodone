@@ -28,9 +28,6 @@ public class GroupService extends BaseService<GroupEntity> {
 	@Autowired()
 	private TokenService tokenService;
 
-	@Autowired
-    private MediaDownloadQueue mediaDownloadQueue;
-
 	//
 
 	public GroupEntity save(GroupEntity group) {
