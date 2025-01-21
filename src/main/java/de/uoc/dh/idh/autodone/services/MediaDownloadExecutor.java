@@ -34,7 +34,7 @@ import de.uoc.dh.idh.autodone.entities.MediaEntity;
 
 @Component
 public class MediaDownloadExecutor {
-    private final PriorityBlockingQueue<MediaDownloadTask> queue;
+    private final MediaDownloadQueue queue;
     private final ExecutorService executorService;
 
     @Autowired()
@@ -43,7 +43,7 @@ public class MediaDownloadExecutor {
 
     @Autowired()
     public MediaDownloadExecutor(MediaDownloadQueue queue) {
-        this.queue = queue.getQueue();
+        this.queue = queue;
         this.executorService = Executors.newFixedThreadPool(AUTODONE_DOWNLOADTHREADPOOL);
         System.out.println("Created executor service with 1 threads");
         System.out.println("MediaDownloadExecutor queue instance: " + System.identityHashCode(this.queue));
@@ -61,7 +61,10 @@ public class MediaDownloadExecutor {
         try {
             System.out.println("Thread started with id: " + Thread.currentThread().getId());
             while (true) {
-                MediaDownloadTask task = queue.take();
+                System.out.println("Taking task from queue");
+                MediaDownloadTask task = queue.takeTask();
+                System.out.println("Taking task from queue: " + task.getMedia().getUrl());
+
                 MediaEntity downloadMedia = importMedia(task.getMedia().getUrl());
 
                 MediaEntity media = mediaService.getAny(task.getMedia().getUuid());

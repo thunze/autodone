@@ -10,7 +10,6 @@ public class MediaDownloadQueue {
 
     public void addTask(MediaDownloadTask task) {
         queue.add(task);
-        System.out.println("MediaDownloadQueue instance: " + System.identityHashCode(this));
     }
 
     public MediaDownloadTask takeTask() throws InterruptedException {
