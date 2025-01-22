@@ -100,7 +100,7 @@
           <tbody>
             <tr th:classappend="${status.exceptions.size()} ? 'table-warning'" th:each="status : ${page}">
               <td th:text="${status.status}"></td>
-              <td th:text="*{#temporals.format(status.date, 'M/d/yyyy h:mm a')}"></td>
+              <td th:text="*{#temporals.format(status.date, 'dd.MM.yyyy HH:mm', 'Europe/Berlin')}"></td>
               <td th:text="${status.media.size()}" class="text-end"></td>
             </tr>
           </tbody>
