@@ -89,7 +89,6 @@ public class ImportController {
 
 			var save = groupService.save(mapFields(form, group, FORCE));
 
-			System.out.println("Now adding media download tasks");
 			for (var status : save.status) {
 				if (status.media.size() > 0) {
 					mediaDownloadQueue.addTask(new MediaDownloadTask(status.media.get(0), status));

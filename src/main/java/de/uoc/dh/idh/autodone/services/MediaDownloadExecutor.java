@@ -45,9 +45,7 @@ public class MediaDownloadExecutor {
     public MediaDownloadExecutor(MediaDownloadQueue queue) {
         this.queue = queue;
         this.executorService = Executors.newFixedThreadPool(AUTODONE_DOWNLOADTHREADPOOL);
-        System.out.println("Created executor service with 1 threads");
-        System.out.println("MediaDownloadExecutor queue instance: " + System.identityHashCode(this.queue));
-
+        System.out.println("Created executor service with threads: " + AUTODONE_DOWNLOADTHREADPOOL);
     }
 
     @PostConstruct
@@ -61,9 +59,7 @@ public class MediaDownloadExecutor {
         try {
             System.out.println("Thread started with id: " + Thread.currentThread().getId());
             while (true) {
-                System.out.println("Taking task from queue");
                 MediaDownloadTask task = queue.takeTask();
-                System.out.println("Taking task from queue: " + task.getMedia().getUrl());
 
                 MediaEntity downloadMedia = importMedia(task.getMedia().getUrl());
 
