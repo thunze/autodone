@@ -245,7 +245,7 @@ public enum SupportedLocales {
         Map<String, String> languages = new TreeMap<>();
 
         for (SupportedLocales locale : SupportedLocales.values()) {
-            languages.put(locale.getLocale(), locale.toString());
+            languages.put(locale.name(), locale.toString());
         }
         
         return languages;
