@@ -47,8 +47,8 @@
             <label class="form-label fw-bold" for="language">Language</label>
             <div class="form-floating">
               <select th:field="*{language}" class="form-select">
-                <th:block th:each="language : ${languages}">
-                    <option th:value="${language.key}" th:text="${language.value}"></option>
+                <th:block th:each="lang : ${languages}">
+                    <option th:value="${lang.key}" th:text="${lang.value}"></option>
                 </th:block>
               </select>
               <label class="form-label">Language of the posts</label>
