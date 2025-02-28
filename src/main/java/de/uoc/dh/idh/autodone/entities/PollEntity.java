@@ -45,7 +45,7 @@ public class PollEntity {
 	//
 
 	@Column(nullable = false)
-	public int expiresIn;
+	public Integer expiresIn;
 
 	@Column(nullable = false)
 	public boolean multiple;
